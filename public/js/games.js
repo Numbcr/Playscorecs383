@@ -2,12 +2,28 @@ let popularPage = 1;
 let recentPage = 1;
 const gamesPerPage = 4;
 
+// Cache to store fetched pages
+const gameCache = {};
+let isLoadingPopular = false;
+let isLoadingRecent = false;
+
 async function fetchPopularGames(page) {
+    const cacheKey = `popular_${page}`;
+    
+    // Return cached data if available
+    if (gameCache[cacheKey]) {
+        return gameCache[cacheKey];
+    }
+    
     try {
         const response = await fetch(`/api/games/popular?page=${page}&limit=${gamesPerPage}`);
         if (!response.ok) throw new Error('Failed to fetch popular games');
         const result = await response.json();
-        return result.success ? result.data : [];
+        const data = result.success ? result.data : [];
+        
+        // Cache the result
+        gameCache[cacheKey] = data;
+        return data;
     } catch (error) {
         console.error('Error fetching popular games:', error);
         return [];
@@ -15,15 +31,35 @@ async function fetchPopularGames(page) {
 }
 
 async function fetchRecentGames(page) {
+    const cacheKey = `recent_${page}`;
+    
+    // Return cached data if available
+    if (gameCache[cacheKey]) {
+        return gameCache[cacheKey];
+    }
+    
     try {
         const response = await fetch(`/api/games/recent?page=${page}&limit=${gamesPerPage}`);
         if (!response.ok) throw new Error('Failed to fetch recent games');
         const result = await response.json();
-        return result.success ? result.data : [];
+        const data = result.success ? result.data : [];
+        
+        // Cache the result
+        gameCache[cacheKey] = data;
+        return data;
     } catch (error) {
         console.error('Error fetching recent games:', error);
         return [];
     }
+}
+
+// Preload next pages in the background
+function preloadNextPages() {
+    // Preload next popular page
+    fetchPopularGames(popularPage + 1).catch(() => {});
+    
+    // Preload next recent page
+    fetchRecentGames(recentPage + 1).catch(() => {});
 }
 
 function getScoreClass(rating) {
@@ -72,6 +108,8 @@ async function displayPopularGames() {
                 <i class="fas fa-chevron-right"></i>
             </button>
         `;
+        // Preload next page in background
+        setTimeout(preloadNextPages, 500);
     } else {
         container.innerHTML = '<p class="text-center">No popular games found</p>';
     }
@@ -94,27 +132,43 @@ async function displayRecentGames() {
                 <i class="fas fa-chevron-right"></i>
             </button>
         `;
+        // Preload next page in background
+        setTimeout(preloadNextPages, 500);
     } else {
         container.innerHTML = '<p class="text-center">No recent games found</p>';
     }
 }
 
 async function navigatePopular(direction) {
+    if (isLoadingPopular) return;
+    
     const nextPage = popularPage + direction;
     if (nextPage < 1) return;
-    popularPage = nextPage;
-    const games = await fetchPopularGames(popularPage);
-    if (games.length > 0) displayPopularGames();
-    else popularPage -= direction;
+    
+    isLoadingPopular = true;
+    const games = await fetchPopularGames(nextPage);
+    isLoadingPopular = false;
+    
+    if (games.length > 0) {
+        popularPage = nextPage;
+        displayPopularGames();
+    }
 }
 
 async function navigateRecent(direction) {
+    if (isLoadingRecent) return;
+    
     const nextPage = recentPage + direction;
     if (nextPage < 1) return;
-    recentPage = nextPage;
-    const games = await fetchRecentGames(recentPage);
-    if (games.length > 0) displayRecentGames();
-    else recentPage -= direction;
+    
+    isLoadingRecent = true;
+    const games = await fetchRecentGames(nextPage);
+    isLoadingRecent = false;
+    
+    if (games.length > 0) {
+        recentPage = nextPage;
+        displayRecentGames();
+    }
 }
 
 async function searchGames(query) {

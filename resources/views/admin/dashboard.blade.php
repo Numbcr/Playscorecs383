@@ -5,30 +5,30 @@
 @section('content')
 <div class="container mt-4 mb-5">
     <!-- Welcome Banner -->
-    <div class="card bg-dark text-light border-danger border-start border-5 mb-4">
+    <div class="card bg-dark text-light border-info border-start border-5 mb-4" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: #007bff !important;">
         <div class="card-body">
-            <h4 class="card-title text-danger">Admin Dashboard</h4>
+            <h4 class="card-title text-info">Admin Dashboard</h4>
             <p class="card-text text-secondary">Search for games on RAWG API, add reviews, and manage your game library</p>
         </div>
     </div>
 
     <!-- Add New Games Section -->
-    <div class="card bg-dark text-light mb-4 border-secondary">
-        <div class="card-header bg-dark border-secondary">
-            <h5 class="mb-0 text-danger">Add New Game Review</h5>
+    <div class="card bg-dark text-light mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
+        <div class="card-header bg-dark border-info" style="border-color: rgba(0, 123, 255, 0.2) !important;">
+            <h5 class="mb-0 text-info">Add New Game Review</h5>
         </div>
         <div class="card-body">
             <!-- RAWG ID Input for Preview -->
             <div class="input-group mb-3">
-                <input type="text" id="rawgSearchInput" class="form-control" placeholder="Enter RAWG Game ID..." />
-                <button class="btn btn-outline-secondary" type="button" onclick="previewRawgGame()">Preview Game</button>
+                <input type="text" id="rawgSearchInput" class="form-control" placeholder="Enter RAWG Game ID..." style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
+                <button class="btn btn-outline-info" type="button" onclick="previewRawgGame()">Preview Game</button>
             </div>
 
             <!-- Message Area -->
             <div id="messageArea" class="alert d-none"></div>
 
             <!-- Game Preview -->
-            <div id="gamePreviewContainer" class="card bg-secondary d-none mb-3 border-secondary">
+            <div id="gamePreviewContainer" class="card bg-secondary d-none mb-3 border-info" style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%) !important; border-color: rgba(0, 123, 255, 0.2) !important;">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
@@ -36,12 +36,12 @@
                         </div>
                         <div class="col-md-8">
                             <h5 id="gamePreviewTitle" class="mb-3 text-light"></h5>
-                            <p class="mb-2 text-light"><strong class="text-danger">Released:</strong> <span id="gamePreviewReleased"></span></p>
-                            <p class="mb-2 text-light"><strong class="text-danger">Genres:</strong> <span id="gamePreviewGenres"></span></p>
-                            <p class="mb-2 text-light"><strong class="text-danger">Developers:</strong> <span id="gamePreviewDevelopers"></span></p>
-                            <p class="mb-2 text-light"><strong class="text-danger">Publishers:</strong> <span id="gamePreviewPublishers"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">Released:</strong> <span id="gamePreviewReleased"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">Genres:</strong> <span id="gamePreviewGenres"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">Developers:</strong> <span id="gamePreviewDevelopers"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">Publishers:</strong> <span id="gamePreviewPublishers"></span></p>
                             <div class="mt-3 mb-3 text-light" style="max-height: 200px; overflow-y: auto;" id="gamePreviewDescription"></div>
-                            <button type="button" onclick="addReviewFromPreview()" class="btn btn-danger">Add Review for This Game</button>
+                            <button type="button" onclick="addReviewFromPreview()" class="btn btn-info">Add Review for This Game</button>
                         </div>
                     </div>
                 </div>
@@ -53,9 +53,9 @@
     </div>
 
     <!-- Review Form Section (Hidden) -->
-    <div id="reviewFormContainer" class="card bg-dark text-light d-none mb-4 border-secondary">
-        <div class="card-header bg-dark border-secondary d-flex justify-content-between align-items-center">
-            <h5 id="formTitle" class="mb-0 text-danger">Add New Game Review</h5>
+    <div id="reviewFormContainer" class="card bg-dark text-light d-none mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
+        <div class="card-header bg-dark border-info d-flex justify-content-between align-items-center" style="border-color: rgba(0, 123, 255, 0.2) !important;">
+            <h5 id="formTitle" class="mb-0 text-info">Add New Game Review</h5>
             <button type="button" class="btn-close btn-close-white" onclick="closeReviewForm()"></button>
         </div>
         <div class="card-body">
@@ -64,18 +64,18 @@
                 <input type="hidden" id="selectedRawgId">
                 <div class="mb-3">
                     <label for="gameTitle" class="form-label">Game Title</label>
-                    <input type="text" id="gameTitle" name="game_title" class="form-control" placeholder="Game title..." readonly>
+                    <input type="text" id="gameTitle" name="game_title" class="form-control" placeholder="Game title..." readonly style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
                 </div>
                 <div class="mb-3">
                     <label for="rating" class="form-label">Your Rating (1-100)</label>
-                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="100" placeholder="Enter your rating..." required>
+                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="100" placeholder="Enter your rating..." required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
                 </div>
                 <div class="mb-3">
                     <label for="reviewText" class="form-label">Your Review</label>
-                    <textarea id="reviewText" name="review_text" class="form-control" rows="5" placeholder="Write your review here..." required></textarea>
+                    <textarea id="reviewText" name="review_text" class="form-control" rows="5" placeholder="Write your review here..." required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;"></textarea>
                 </div>
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-danger flex-grow-1" id="submitBtnText">Add Review</button>
+                    <button type="submit" class="btn btn-info flex-grow-1" id="submitBtnText">Add Review</button>
                     <button type="button" class="btn btn-secondary" onclick="closeReviewForm()">Cancel</button>
                 </div>
             </form>
@@ -83,21 +83,21 @@
     </div>
 
     <!-- Manage Games Section (Search by Game ID) -->
-    <div class="card bg-dark text-light mb-4 border-secondary">
-        <div class="card-header bg-dark border-secondary">
-            <h5 class="mb-0 text-danger">Manage Existing Reviews</h5>
+    <div class="card bg-dark text-light mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
+        <div class="card-header bg-dark border-info" style="border-color: rgba(0, 123, 255, 0.2) !important;">
+            <h5 class="mb-0 text-info">Manage Existing Reviews</h5>
         </div>
         <div class="card-body">
             <div class="input-group mb-3">
-                <input type="text" id="searchGameId" class="form-control" placeholder="Enter Game ID to manage..." />
-                <button class="btn btn-outline-secondary" type="button" onclick="searchReviewById()">Search</button>
+                <input type="text" id="searchGameId" class="form-control" placeholder="Enter Game ID to manage..." style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
+                <button class="btn btn-outline-info" type="button" onclick="searchReviewById()">Search</button>
             </div>
 
             <div id="reviewMessageArea" class="alert d-none"></div>
 
             <!-- Review Details (shown after search) -->
             <div id="reviewDetails" class="d-none mb-4">
-                <div class="card bg-secondary border-secondary">
+                <div class="card bg-secondary border-info" style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%) !important; border-color: rgba(0, 123, 255, 0.2) !important;">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
@@ -109,15 +109,15 @@
                                     <input type="hidden" id="managedGameId">
                                     <div class="mb-3">
                                         <label for="managedRating" class="form-label">Rating (1-100)</label>
-                                        <input type="number" id="managedRating" class="form-control" min="1" max="100" required>
+                                        <input type="number" id="managedRating" class="form-control" min="1" max="100" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
                                     </div>
                                     <div class="mb-3">
                                         <label for="managedReviewText" class="form-label">Review</label>
-                                        <textarea id="managedReviewText" class="form-control" rows="5" required></textarea>
+                                        <textarea id="managedReviewText" class="form-control" rows="5" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;"></textarea>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-danger flex-grow-1" onclick="updateManagedReview()">Update Review</button>
-                                        <button type="button" class="btn btn-danger-outline" onclick="deleteManagedReview()">Delete Review</button>
+                                        <button type="button" class="btn btn-info flex-grow-1" onclick="updateManagedReview()">Update Review</button>
+                                        <button type="button" class="btn btn-outline-danger" onclick="deleteManagedReview()">Delete Review</button>
                                     </div>
                                 </form>
                             </div>
@@ -131,7 +131,7 @@
                 <h6 class="mb-3 text-light">All Your Reviews</h6>
                 <div class="table-responsive">
                     <table class="table table-hover text-light">
-                        <thead class="table-danger">
+                        <thead style="background-color: rgba(0, 123, 255, 0.15); border-color: rgba(0, 123, 255, 0.2);">
                             <tr>
                                 <th>Game ID</th>
                                 <th>Game</th>

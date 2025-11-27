@@ -263,7 +263,7 @@ class GameController extends Controller
         // Only fetch RAWG data if rawg_id exists
         if ($game->rawg_id) {
             try {
-                $rawgResponse = Http::get("https://api.rawg.io/api/games/{$game->rawg_id}", [
+                $rawgResponse = Http::timeout(5)->get("https://api.rawg.io/api/games/{$game->rawg_id}", [
                     'key' => $this->rawgApiKey,
                 ]);
 
@@ -273,7 +273,7 @@ class GameController extends Controller
                 }
             } catch (\Exception $e) {
                 // Log error if needed, but don't fail the request
-                \Log::error('RAWG API error: ' . $e->getMessage());
+                \Log::warning('RAWG API error for game ' . $game->rawg_id . ': ' . $e->getMessage());
             }
         }
 
