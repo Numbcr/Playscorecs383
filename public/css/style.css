@@ -1,0 +1,469 @@
+body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+.navbar {
+    background-color: #212529;
+}
+
+.game-card {
+    background-color: #2d2d2d;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 250px;
+    max-width: 100%;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.game-image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.game-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.score-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    min-width: 45px;
+    height: 45px;
+    padding: 8px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    z-index: 1;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.review-meta {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 1rem;
+}
+
+.read-review-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #373737;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.read-review-btn:hover {
+    background-color: #444444;
+}
+
+
+.score-high {
+    background-color: #28a745;
+   
+}
+
+.score-mid {
+    background-color: #ffc107;
+    
+}
+
+.score-low {
+    background-color: #dc3545;
+   
+}
+
+
+.footer {
+    background-color: #212529;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+.logo {
+    font-family: 'Arial', sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: -1px;
+    color: #ffffff;
+}
+.logo:hover {
+    color: #007bff;
+    transition: color 0.5s ease;
+    
+}
+a {
+    text-decoration: none;
+}
+.text-muted {
+    color: #888 !important;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+
+.favorited {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.favorited:hover {
+    background-color: #bb2d3b;
+    border-color: #bb2d3b;
+    color: white;
+}
+
+.btn-outline-light:hover {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.nav-button.prev {
+    left: -20px;
+}
+
+.nav-button.next {
+    right: -20px;
+}
+
+.nav-button i {
+    color: white;
+    font-size: 18px;
+}
+
+
+
+.empty-container .nav-button {
+    display: none;
+}
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 320px;
+    }
+    
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .game-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .game-grid {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .card-img-top {
+        height: 280px;
+    }
+}
+
+.game-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.media-section {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin-bottom: 30px;
+    background-color: #2d2d2d;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.media-item {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.media-item.active {
+    display: block;
+}
+
+.game-info {
+    background-color: #2d2d2d;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.game-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.meta-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.meta-item {
+    background-color: #373737;
+    padding: 15px;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.meta-item:hover {
+    transform: translateY(-2px);
+}
+
+.meta-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.review-section {
+    background-color: #2d2d2d;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #373737;
+}
+
+.review-header h2 {
+    color: #ffffff;
+    font-size: 1.4rem;
+}
+
+.review-date {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+#reviewRating {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    padding: 10px 15px;
+    display: inline-block;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.review-text {
+    line-height: 1.6;
+    color: #ffffff;
+    margin: 15px 0;
+}
+
+#reviewerName {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .media-section {
+        height: 300px;
+    }
+
+    .game-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .meta-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+#searchResultsContainer {
+    min-height: 200px;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+}
+
+.search-results-enter {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.search-results-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.spinner-border {
+    margin-right: 0.5rem;
+}
+
+.btn-outline-light {
+    margin-top: auto;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .game-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+    
+    .card-img-top {
+        height: 320px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .game-grid {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .card-img-top {
+        height: 280px;
+    }
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-header {
+    background-color: #1d2025;
+    border-bottom: 1px solid #373737;
+}
+
+.search-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.search-subtitle {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.filters-section {
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #373737;
+}
+
+.form-select {
+    background-color: #373737;
+    border: 1px solid #404040;
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.form-select:focus {
+    background-color: #373737;
+    border-color: #007bff;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.results-section {
+    min-height: 400px;
+    padding: 2rem 0;
+}
