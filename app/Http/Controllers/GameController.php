@@ -26,8 +26,8 @@ class GameController extends Controller
         $limit = $request->query('limit', 10);
         $offset = ($page - 1) * $limit;
 
-        // Get only current user's games
-        $games = Game::where('admin_id', Auth::id())
+        // Get all games, sorted by rating
+        $games = Game::with('admin')
             ->orderByDesc('rating')
             ->skip($offset)
             ->take($limit)
@@ -112,8 +112,8 @@ class GameController extends Controller
                 'rating' => $game->rating,
                 'review_text' => $game->review_text,
                 'created_at' => $game->created_at,
-                'username' => $game->admin->username,
-                'user_id' => $game->admin->user_id,
+                'username' => $game->admin?->name ?? 'Anonymous',
+                'user_id' => $game->admin?->id,
             ],
         ]);
     }
@@ -258,19 +258,23 @@ class GameController extends Controller
      */
     private function enrichGameData($game)
     {
-        try {
-            $rawgResponse = Http::get("https://api.rawg.io/api/games/{$game->rawg_id}", [
-                'key' => $this->rawgApiKey,
-            ]);
+        $game->game_image = '';
 
-            if ($rawgResponse->successful()) {
-                $rawgData = $rawgResponse->json();
-                $game->game_image = $rawgData['background_image'] ?? '';
-            } else {
-                $game->game_image = '';
+        // Only fetch RAWG data if rawg_id exists
+        if ($game->rawg_id) {
+            try {
+                $rawgResponse = Http::get("https://api.rawg.io/api/games/{$game->rawg_id}", [
+                    'key' => $this->rawgApiKey,
+                ]);
+
+                if ($rawgResponse->successful()) {
+                    $rawgData = $rawgResponse->json();
+                    $game->game_image = $rawgData['background_image'] ?? '';
+                }
+            } catch (\Exception $e) {
+                // Log error if needed, but don't fail the request
+                \Log::error('RAWG API error: ' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            $game->game_image = '';
         }
 
         return [
