@@ -67,7 +67,7 @@ function login(e) {
         window.location.href = "/";
       }, 100);
     } else {
-      alert(data.message || "Login failed.");
+      alert(data.message || "Login successed .");
     }
   })
   .catch(error => {
