@@ -7,7 +7,7 @@
     <!-- Welcome Banner -->
     <div class="card bg-dark text-light border-info border-start border-5 mb-4" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: #007bff !important;">
         <div class="card-body">
-            <h4 class="card-title text-info">Admin Dashboard</h4>
+            <h4 class="card-title text-info">{{ __('messages.admin_dashboard') }}</h4>
             <p class="card-text text-secondary">Search for games on RAWG API, add reviews, and manage your game library</p>
         </div>
     </div>
