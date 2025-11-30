@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -23,6 +24,21 @@ class ChatController extends Controller
                 ], 500);
             }
 
+            // Get games from database to provide context
+            $games = Game::with('admin')->get()->map(function($game) {
+                return [
+                    'title' => $game->game_title,
+                    'rating' => $game->rating,
+                    'review' => substr($game->review_text, 0, 200) . '...',
+                    'reviewer' => $game->admin->name ?? 'Anonymous'
+                ];
+            })->toArray();
+
+            $gamesContext = "Here are the games reviewed on PlayScore:\n\n";
+            foreach ($games as $game) {
+                $gamesContext .= "- {$game['title']} (Rating: {$game['rating']}/100) - Reviewed by {$game['reviewer']}\n";
+            }
+
             $response = Http::timeout(30)->post(
                 "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={$geminiKey}",
                 [
@@ -30,7 +46,7 @@ class ChatController extends Controller
                         [
                             'parts' => [
                                 [
-                                    'text' => "You are an expert gaming assistant for PlayScore, a professional game review website. You have deep knowledge of video games across all platforms, genres, and eras. Provide helpful, enthusiastic recommendations and insights. Be concise but informative. When recommending games, mention specific titles and why they're good. Keep responses under 100 words.\n\nUser question: " . $request->input('message')
+                                    'text' => "You are an expert gaming assistant for PlayScore, a professional game review website. You have access to our reviewed games database. When users ask for recommendations, prioritize games from our reviews. Provide helpful, enthusiastic recommendations and insights. Be concise but informative. Keep responses under 100 words.\n\n{$gamesContext}\n\nUser question: " . $request->input('message')
                                 ]
                             ]
                         ]
