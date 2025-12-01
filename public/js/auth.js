@@ -97,7 +97,7 @@ function updateNavigation() {
         console.log('Session check response:', data);
         if (data.loggedIn) {
             const adminLink = data.isAdmin ? 
-                '<li><a class="dropdown-item" href="/admin/dashboard">Admin Dashboard</a></li>' : '';
+                `<li><a class="dropdown-item" href="/admin/dashboard">${window.translations?.admin_dashboard || 'Admin Dashboard'}</a></li>` : '';
             loginButton.innerHTML = `
                 <div class="dropdown">
                     <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -105,7 +105,7 @@ function updateNavigation() {
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         ${adminLink}
-                        <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()">${window.translations?.logout || 'Logout'}</a></li>
                     </ul>
                 </div>`;
             
@@ -114,14 +114,14 @@ function updateNavigation() {
                 return new bootstrap.Dropdown(el);
             });
         } else {
-            loginButton.innerHTML = '<a href="/login" class="btn btn-outline-light">Login</a>';
+            loginButton.innerHTML = `<a href="/login" class="btn btn-outline-light">${window.translations?.login || 'Login'}</a>`;
         }
     })
     .catch(error => {
         console.error('Session check failed:', error);
         const loginButton = document.querySelector('.login-button');
         if (loginButton) {
-            loginButton.innerHTML = '<a href="/login" class="btn btn-outline-light">Login</a>';
+            loginButton.innerHTML = `<a href="/login" class="btn btn-outline-light">${window.translations?.login || 'Login'}</a>`;
         }
     });
 }

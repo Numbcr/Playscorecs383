@@ -33,6 +33,13 @@
     <script src="{{ asset('js/auth.js') }}"></script>
     <script src="{{ asset('js/chat.js') }}"></script>
     <script>
+        // Pass translations to JavaScript
+        window.translations = {
+            login: "{{ __('messages.login') }}",
+            logout: "{{ __('messages.logout') }}",
+            admin_dashboard: "{{ __('messages.admin_dashboard') }}"
+        };
+        
         // Set CSRF token for AJAX requests
         $.ajaxSetup({
             headers: {
