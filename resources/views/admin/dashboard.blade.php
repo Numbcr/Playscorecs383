@@ -134,15 +134,6 @@
             <div>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 class="mb-0 text-light">{{ __('messages.all_reviews') }}</h6>
-                    <div class="d-flex align-items-center gap-2">
-                        <label for="itemsPerPage" class="text-light mb-0">{{ __('messages.items_per_page') }}:</label>
-                        <select id="itemsPerPage" class="form-select form-select-sm dashboard-select" onchange="changeItemsPerPage()">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover text-light table-dark-custom">
@@ -409,16 +400,16 @@ document.getElementById('reviewForm').addEventListener('submit', function(e) {
 
 // Pagination variables
 let currentPage = 1;
-let itemsPerPage = 10;
+let itemsPerPage = 5;
 let allReviews = [];
 
 function loadGames() {
     $.ajax({
-        url: '/api/games/popular',
+        url: '/api/games/popular?limit=1000',
         method: 'GET',
         success: function(response) {
             if (response.data && response.data.length > 0) {
-                allReviews = response.data;
+                allReviews = response.data.sort((a, b) => a.game_id - b.game_id);
                 displayPaginatedReviews();
             } else {
                 const tbody = document.getElementById('gamesTableBody');
@@ -468,8 +459,8 @@ function updatePaginationControls() {
     const paginationInfo = document.getElementById('paginationInfo');
     const paginationButtons = document.getElementById('paginationButtons');
     
-    // Show/hide pagination if needed
-    if (totalPages <= 1) {
+    // Always show pagination controls if there are any reviews
+    if (allReviews.length === 0) {
         document.getElementById('paginationControls').classList.add('d-none');
         return;
     } else {
@@ -484,16 +475,24 @@ function updatePaginationControls() {
     // Build pagination buttons
     paginationButtons.innerHTML = '';
     
-    // Previous button
+    // Previous button (always show, disabled on first page or single page)
     const prevLi = document.createElement('li');
-    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevLi.className = `page-item ${currentPage === 1 || totalPages === 1 ? 'disabled' : ''}`;
     prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">Previous</a>`;
     paginationButtons.appendChild(prevLi);
     
     // Page numbers
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    if (totalPages === 1) {
+        // Show single page number
+        const singlePageLi = document.createElement('li');
+        singlePageLi.className = 'page-item active';
+        singlePageLi.innerHTML = `<a class="page-link" href="#">1</a>`;
+        paginationButtons.appendChild(singlePageLi);
+    } else {
+        // Show multiple page numbers
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
     
     if (endPage - startPage < maxVisiblePages - 1) {
         startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -533,10 +532,11 @@ function updatePaginationControls() {
         li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${totalPages}); return false;">${totalPages}</a>`;
         paginationButtons.appendChild(li);
     }
+    }
     
-    // Next button
+    // Next button (always show, disabled on last page or single page)
     const nextLi = document.createElement('li');
-    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextLi.className = `page-item ${currentPage === totalPages || totalPages === 1 ? 'disabled' : ''}`;
     nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">Next</a>`;
     paginationButtons.appendChild(nextLi);
 }

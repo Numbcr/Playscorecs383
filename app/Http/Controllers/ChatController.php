@@ -12,6 +12,9 @@ class ChatController extends Controller
     {
         $request->validate([
             'message' => 'required|string|max:1000',
+            'history' => 'nullable|array',
+            'history.*.role' => 'string|in:user,bot',
+            'history.*.content' => 'string',
         ]);
 
         try {
@@ -39,21 +42,44 @@ class ChatController extends Controller
                 $gamesContext .= "- {$game['title']} (Rating: {$game['rating']}/100) - Reviewed by {$game['reviewer']}\n";
             }
 
+            // Build conversation history for Gemini
+            $contents = [];
+            
+            // Add system message as first user message (Gemini doesn't have system role)
+            $contents[] = [
+                'role' => 'user',
+                'parts' => [
+                    ['text' => "You are an expert gaming assistant for PlayScore, a professional game review website. You have access to our reviewed games database. When users ask for recommendations, prioritize games from our reviews. Provide helpful, enthusiastic recommendations and insights. Be concise but informative.\n\n{$gamesContext}"]
+                ]
+            ];
+            
+            $contents[] = [
+                'role' => 'model',
+                'parts' => [
+                    ['text' => "Hi! I'm your gaming assistant. I have access to all the games reviewed on PlayScore. Ask me anything about games, recommendations, or reviews!"]
+                ]
+            ];
+
+            // Add conversation history
+            $history = $request->input('history', []);
+            foreach ($history as $msg) {
+                // Map 'bot' to 'model' for Gemini API
+                $role = $msg['role'] === 'bot' ? 'model' : 'user';
+                $contents[] = [
+                    'role' => $role,
+                    'parts' => [
+                        ['text' => $msg['content']]
+                    ]
+                ];
+            }
+
             $response = Http::timeout(30)->post(
                 "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={$geminiKey}",
                 [
-                    'contents' => [
-                        [
-                            'parts' => [
-                                [
-                                    'text' => "You are an expert gaming assistant for PlayScore, a professional game review website. You have access to our reviewed games database. When users ask for recommendations, prioritize games from our reviews. Provide helpful, enthusiastic recommendations and insights. Be concise but informative. Keep responses under 30 words.\n\n{$gamesContext}\n\nUser question: " . $request->input('message')
-                                ]
-                            ]
-                        ]
-                    ],
+                    'contents' => $contents,
                     'generationConfig' => [
                         'temperature' => 0.9,
-                        'maxOutputTokens' => 150,
+                        'maxOutputTokens' => 300,
                         'topP' => 0.95,
                         'topK' => 40,
                     ]

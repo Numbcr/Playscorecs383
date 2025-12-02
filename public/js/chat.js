@@ -73,8 +73,9 @@ class ChatWidget {
         
         if (!message) return;
 
-        // Add user message to chat
+        // Add user message to chat and history
         this.addMessage(message, 'user');
+        this.messages.push({ role: 'user', content: message });
         input.value = '';
 
         // Show typing indicator
@@ -87,7 +88,10 @@ class ChatWidget {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
-                body: JSON.stringify({ message })
+                body: JSON.stringify({ 
+                    message,
+                    history: this.messages
+                })
             });
 
             const data = await response.json();
@@ -95,6 +99,7 @@ class ChatWidget {
 
             if (data.success) {
                 this.addMessage(data.reply, 'bot');
+                this.messages.push({ role: 'bot', content: data.reply });
             } else {
                 this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
             }
