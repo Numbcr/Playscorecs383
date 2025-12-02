@@ -5,10 +5,11 @@ function validateAndRegister(e) {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   const confirm = document.getElementById('password_confirmation').value;
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  const csrfToken = document.querySelector('meta[name="csrf-token"').getAttribute('content');
+  const messageEl = document.getElementById('registerMessage');
 
   if (password !== confirm) {
-    alert("Passwords do not match");
+    showMessage(messageEl, "Passwords do not match", 'danger');
     return;
   }
 
@@ -34,15 +35,17 @@ function validateAndRegister(e) {
   })
   .then(data => {
     if (data.success) {
-      alert("Registered!");
-      window.location.href = "/login";
+      showMessage(messageEl, "Registration successful! Redirecting to login...", 'success');
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
     } else {
-      alert(data.message);
+      showMessage(messageEl, data.message || "Registration failed", 'danger');
     }
   })
   .catch(error => {
     console.error('Error:', error);
-    alert("Registration failed");
+    showMessage(messageEl, "Registration failed. Please try again.", 'danger');
   });
 }
 
@@ -50,7 +53,8 @@ function login(e) {
   e.preventDefault();
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  const csrfToken = document.querySelector('meta[name="csrf-token"').getAttribute('content');
+  const messageEl = document.getElementById('loginMessage');
 
   fetch('/api/auth/login', {
     method: 'POST',
@@ -75,12 +79,12 @@ function login(e) {
       localStorage.setItem('user', JSON.stringify(data.user));
       window.location.href = "/";
     } else {
-      alert(data.message || "Login failed.");
+      showMessage(messageEl, data.message || "Login failed. Please check your credentials.", 'danger');
     }
   })
   .catch(error => {
     console.error('Error:', error);
-    alert("Login failed. Please try again.");
+    showMessage(messageEl, "Login failed. Please try again.", 'danger');
   });
 }
 
@@ -159,6 +163,18 @@ function logout() {
     console.error('Logout error:', error);
     window.location.href = '/login';
   });
+}
+
+function showMessage(element, message, type) {
+  element.textContent = message;
+  element.className = `alert alert-${type}`;
+  element.classList.remove('d-none');
+  
+  if (type === 'success') {
+    setTimeout(() => {
+      element.classList.add('d-none');
+    }, 3000);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

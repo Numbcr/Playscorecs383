@@ -29,6 +29,8 @@
                         </div>
                     @endif
 
+                    <div id="loginMessage" class="alert d-none"></div>
+
                     <form id="loginForm" onsubmit="return login(event)">
                         @csrf
                         <div class="mb-3">

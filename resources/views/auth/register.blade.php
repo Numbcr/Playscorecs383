@@ -31,6 +31,8 @@
                         </div>
                     @endif
 
+                    <div id="registerMessage" class="alert d-none"></div>
+
                     <form id="registerForm" onsubmit="return validateAndRegister(event)">
                         @csrf
                         <div class="mb-3">
