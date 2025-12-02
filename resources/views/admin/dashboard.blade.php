@@ -3,53 +3,13 @@
 @section('title', 'Admin Dashboard')
 
 @section('extra-css')
-<style>
-    /* Dark theme for select dropdowns */
-    select.form-select option {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-    }
-    
-    /* Dark table rows */
-    #gamesTableBody tr {
-        background-color: #1a1a1a !important;
-    }
-    
-    #gamesTableBody tr:hover {
-        background-color: #252525 !important;
-    }
-    
-    /* Pagination styling */
-    .pagination .page-link {
-        background-color: #1a1a1a !important;
-        border-color: rgba(0, 123, 255, 0.5) !important;
-        color: #ffffff !important;
-    }
-    
-    .pagination .page-link:hover {
-        background-color: rgba(0, 123, 255, 0.2) !important;
-        border-color: rgba(0, 123, 255, 0.7) !important;
-        color: #ffffff !important;
-    }
-    
-    .pagination .page-item.active .page-link {
-        background-color: #007bff !important;
-        border-color: #007bff !important;
-        color: #ffffff !important;
-    }
-    
-    .pagination .page-item.disabled .page-link {
-        background-color: #0d0d0d !important;
-        border-color: rgba(0, 123, 255, 0.2) !important;
-        color: #6c757d !important;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 @endsection
 
 @section('content')
 <div class="container mt-4 mb-5">
     <!-- Welcome Banner -->
-    <div class="card bg-dark text-light border-info border-start border-5 mb-4" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: #007bff !important;">
+    <div class="card bg-dark text-light border-info border-start border-5 mb-4 dashboard-card dashboard-card-welcome">
         <div class="card-body">
             <h4 class="card-title text-info">{{ __('messages.admin_dashboard') }}</h4>
             <p class="card-text text-secondary">{{ __('messages.dashboard_description') }}</p>
@@ -64,7 +24,7 @@
         <div class="card-body">
             <!-- RAWG ID Input for Preview -->
             <div class="input-group mb-3">
-                <input type="text" id="rawgSearchInput" class="form-control" placeholder="{{ __('messages.enter_rawg_id') }}" style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
+                <input type="text" id="rawgSearchInput" class="form-control dashboard-input" placeholder="{{ __('messages.enter_rawg_id') }}" />
                 <button class="btn btn-outline-info" type="button" onclick="previewRawgGame()">{{ __('messages.preview_game') }}</button>
             </div>
 
@@ -72,7 +32,7 @@
             <div id="messageArea" class="alert d-none"></div>
 
             <!-- Game Preview -->
-            <div id="gamePreviewContainer" class="card bg-secondary d-none mb-3 border-info" style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%) !important; border-color: rgba(0, 123, 255, 0.2) !important;">
+            <div id="gamePreviewContainer" class="card bg-secondary d-none mb-3 border-info game-preview-card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
@@ -84,7 +44,7 @@
                             <p class="mb-2 text-light"><strong class="text-info">{{ __('messages.genres') }}:</strong> <span id="gamePreviewGenres"></span></p>
                             <p class="mb-2 text-light"><strong class="text-info">{{ __('messages.developers') }}:</strong> <span id="gamePreviewDevelopers"></span></p>
                             <p class="mb-2 text-light"><strong class="text-info">{{ __('messages.publishers') }}:</strong> <span id="gamePreviewPublishers"></span></p>
-                            <div class="mt-3 mb-3 text-light" style="max-height: 200px; overflow-y: auto;" id="gamePreviewDescription"></div>
+                            <div class="mt-3 mb-3 text-light game-preview-description" id="gamePreviewDescription"></div>
                             <button type="button" onclick="addReviewFromPreview()" class="btn btn-info">{{ __('messages.add_review_for_game') }}</button>
                         </div>
                     </div>
@@ -97,8 +57,8 @@
     </div>
 
     <!-- Review Form Section (Hidden) -->
-    <div id="reviewFormContainer" class="card bg-dark text-light d-none mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
-        <div class="card-header bg-dark border-info d-flex justify-content-between align-items-center" style="border-color: rgba(0, 123, 255, 0.2) !important;">
+    <div id="reviewFormContainer" class="card bg-dark text-light d-none mb-4 border-info dashboard-card">
+        <div class="card-header bg-dark border-info d-flex justify-content-between align-items-center dashboard-card-header">
             <h5 id="formTitle" class="mb-0 text-info">{{ __('messages.add_new_review') }}</h5>
             <button type="button" class="btn-close btn-close-white" onclick="closeReviewForm()"></button>
         </div>
@@ -108,15 +68,15 @@
                 <input type="hidden" id="selectedRawgId">
                 <div class="mb-3">
                     <label for="gameTitle" class="form-label">{{ __('messages.game_title') }}</label>
-                    <input type="text" id="gameTitle" name="game_title" class="form-control" placeholder="{{ __('messages.game_title') }}..." readonly style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
+                    <input type="text" id="gameTitle" name="game_title" class="form-control dashboard-input" placeholder="{{ __('messages.game_title') }}..." readonly>
                 </div>
                 <div class="mb-3">
                     <label for="rating" class="form-label">{{ __('messages.your_rating') }}</label>
-                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="100" placeholder="{{ __('messages.enter_rating') }}" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
+                    <input type="number" id="rating" name="rating" class="form-control dashboard-input" min="1" max="100" placeholder="{{ __('messages.enter_rating') }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="reviewText" class="form-label">{{ __('messages.your_review') }}</label>
-                    <textarea id="reviewText" name="review_text" class="form-control" rows="5" placeholder="{{ __('messages.write_review') }}" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;"></textarea>
+                    <textarea id="reviewText" name="review_text" class="form-control dashboard-input" rows="5" placeholder="{{ __('messages.write_review') }}" required></textarea>
                 </div>
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-info flex-grow-1" id="submitBtnText">{{ __('messages.add_review') }}</button>
@@ -127,13 +87,13 @@
     </div>
 
     <!-- Manage Games Section (Search by Game ID) -->
-    <div class="card bg-dark text-light mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
-        <div class="card-header bg-dark border-info" style="border-color: rgba(0, 123, 255, 0.2) !important;">
+    <div class="card bg-dark text-light mb-4 border-info dashboard-card">
+        <div class="card-header bg-dark border-info dashboard-card-header">
             <h5 class="mb-0 text-info">{{ __('messages.manage_reviews') }}</h5>
         </div>
         <div class="card-body">
             <div class="input-group mb-3">
-                <input type="text" id="searchGameId" class="form-control" placeholder="{{ __('messages.enter_game_id') }}" style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
+                <input type="text" id="searchGameId" class="form-control dashboard-input" placeholder="{{ __('messages.enter_game_id') }}" />
                 <button class="btn btn-outline-info" type="button" onclick="searchReviewById()">{{ __('messages.search') }}</button>
             </div>
 
@@ -141,7 +101,7 @@
 
             <!-- Review Details (shown after search) -->
             <div id="reviewDetails" class="d-none mb-4">
-                <div class="card bg-secondary border-info" style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%) !important; border-color: rgba(0, 123, 255, 0.2) !important;">
+                <div class="card bg-secondary border-info game-preview-card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
@@ -153,11 +113,11 @@
                                     <input type="hidden" id="managedGameId">
                                     <div class="mb-3">
                                         <label for="managedRating" class="form-label">{{ __('messages.rating') }} (1-100)</label>
-                                        <input type="number" id="managedRating" class="form-control" min="1" max="100" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
+                                        <input type="number" id="managedRating" class="form-control dashboard-input" min="1" max="100" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="managedReviewText" class="form-label">{{ __('messages.review') }}</label>
-                                        <textarea id="managedReviewText" class="form-control" rows="5" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;"></textarea>
+                                        <textarea id="managedReviewText" class="form-control dashboard-input" rows="5" required></textarea>
                                     </div>
                                     <div class="d-flex gap-2">
                                         <button type="button" class="btn btn-info flex-grow-1" onclick="updateManagedReview()">{{ __('messages.update_review') }}</button>
@@ -176,27 +136,27 @@
                     <h6 class="mb-0 text-light">{{ __('messages.all_reviews') }}</h6>
                     <div class="d-flex align-items-center gap-2">
                         <label for="itemsPerPage" class="text-light mb-0">{{ __('messages.items_per_page') }}:</label>
-                        <select id="itemsPerPage" class="form-select form-select-sm" style="width: auto; background-color: #1a1a1a; border: 1px solid rgba(0, 123, 255, 0.5); color: #ffffff;" onchange="changeItemsPerPage()">
-                            <option value="5" style="background-color: #1a1a1a; color: #ffffff;">5</option>
-                            <option value="10" selected style="background-color: #1a1a1a; color: #ffffff;">10</option>
-                            <option value="20" style="background-color: #1a1a1a; color: #ffffff;">20</option>
-                            <option value="50" style="background-color: #1a1a1a; color: #ffffff;">50</option>
+                        <select id="itemsPerPage" class="form-select form-select-sm dashboard-select" onchange="changeItemsPerPage()">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
                         </select>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover text-light" style="background-color: #1a1a1a;">
-                        <thead style="background-color: rgba(0, 123, 255, 0.3); border-color: rgba(0, 123, 255, 0.5);">
+                    <table class="table table-hover text-light table-dark-custom">
+                        <thead>
                             <tr>
-                                <th style="color: #ffffff;">{{ __('messages.game_id') }}</th>
-                                <th style="color: #ffffff;">{{ __('messages.game') }}</th>
-                                <th style="color: #ffffff;">{{ __('messages.rating') }}</th>
-                                <th style="color: #ffffff;">{{ __('messages.review') }}</th>
-                                <th style="color: #ffffff;">{{ __('messages.added') }}</th>
-                                <th style="color: #ffffff;">{{ __('messages.action') }}</th>
+                                <th>{{ __('messages.game_id') }}</th>
+                                <th>{{ __('messages.game') }}</th>
+                                <th>{{ __('messages.rating') }}</th>
+                                <th>{{ __('messages.review') }}</th>
+                                <th>{{ __('messages.added') }}</th>
+                                <th>{{ __('messages.action') }}</th>
                             </tr>
                         </thead>
-                        <tbody id="gamesTableBody" style="background-color: #1a1a1a;">
+                        <tbody id="gamesTableBody">
                             <tr>
                                 <td colspan="6" class="text-center text-muted">{{ __('messages.loading_reviews') }}</td>
                             </tr>
@@ -483,13 +443,15 @@ function displayPaginatedReviews() {
     
     paginatedReviews.forEach(game => {
         const row = document.createElement('tr');
+        row.style.backgroundColor = '#1a1a1a';
+        row.style.color = '#ffffff';
         const createdDate = new Date(game.created_at).toLocaleDateString();
         row.innerHTML = `
-            <td>${game.game_id}</td>
-            <td><strong>${game.game_title}</strong></td>
+            <td style="color: #ffffff;">${game.game_id}</td>
+            <td style="color: #ffffff;"><strong>${game.game_title}</strong></td>
             <td><strong class="text-danger">${game.rating}/100</strong></td>
-            <td>${game.review_text ? game.review_text.substring(0, 50) + '...' : 'No review'}</td>
-            <td>${createdDate}</td>
+            <td style="color: #cccccc;">${game.review_text ? game.review_text.substring(0, 50) + '...' : 'No review'}</td>
+            <td style="color: #ffffff;">${createdDate}</td>
             <td>
                 <button class="btn btn-sm btn-outline-primary" onclick="loadReviewForEdit(${game.game_id})">Edit</button>
                 <button class="btn btn-sm btn-outline-danger" onclick="deleteGame(${game.game_id})">Delete</button>

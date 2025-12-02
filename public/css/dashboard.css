@@ -1,0 +1,129 @@
+/* Dashboard Specific Styles */
+
+/* Dark theme for select dropdowns */
+select.form-select option {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+/* Fix placeholder text color */
+.form-control::placeholder {
+    color: #999999 !important;
+    opacity: 1 !important;
+}
+
+.form-control::-webkit-input-placeholder {
+    color: #999999 !important;
+}
+
+.form-control::-moz-placeholder {
+    color: #999999 !important;
+}
+
+.form-control:-ms-input-placeholder {
+    color: #999999 !important;
+}
+
+/* Dashboard cards */
+.dashboard-card {
+    background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%) !important;
+    border-color: rgba(0, 123, 255, 0.2) !important;
+}
+
+.dashboard-card-header {
+    background-color: transparent !important;
+    border-color: rgba(0, 123, 255, 0.2) !important;
+}
+
+.dashboard-card-welcome {
+    border-color: #007bff !important;
+}
+
+/* Game preview container */
+.game-preview-card {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%) !important;
+    border-color: rgba(0, 123, 255, 0.2) !important;
+}
+
+.game-preview-description {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Form inputs */
+.dashboard-input {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(0, 123, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+.dashboard-select {
+    width: auto;
+    background-color: #1a1a1a !important;
+    border: 1px solid rgba(0, 123, 255, 0.5) !important;
+    color: #ffffff !important;
+}
+
+/* Dark table and all rows */
+.table-dark-custom {
+    background-color: #1a1a1a !important;
+}
+
+.table-dark-custom thead {
+    background-color: #0d0d0d !important;
+    border-color: rgba(0, 123, 255, 0.5) !important;
+}
+
+.table-dark-custom thead th {
+    color: #ffffff !important;
+    background-color: #0d0d0d !important;
+}
+
+.table-dark-custom tbody {
+    background-color: #1a1a1a !important;
+}
+
+#gamesTableBody tr {
+    background-color: #1a1a1a !important;
+}
+
+#gamesTableBody tr:hover {
+    background-color: #252525 !important;
+}
+
+#gamesTableBody td {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+#gamesTableBody td.text-muted {
+    color: #cccccc !important;
+}
+
+/* Pagination styling */
+#paginationButtons .page-item .page-link {
+    background-color: #1a1a1a !important;
+    border-color: rgba(0, 123, 255, 0.5) !important;
+    color: #ffffff !important;
+}
+
+#paginationButtons .page-item .page-link:hover {
+    background-color: rgba(0, 123, 255, 0.3) !important;
+    border-color: rgba(0, 123, 255, 0.7) !important;
+    color: #ffffff !important;
+}
+
+#paginationButtons .page-item.active .page-link {
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    color: #ffffff !important;
+    z-index: 3;
+}
+
+#paginationButtons .page-item.disabled .page-link,
+#paginationButtons .page-item.disabled span.page-link {
+    background-color: #0d0d0d !important;
+    border-color: rgba(0, 123, 255, 0.2) !important;
+    color: #6c757d !important;
+}
