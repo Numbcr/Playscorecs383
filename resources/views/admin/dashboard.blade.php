@@ -2,6 +2,50 @@
 
 @section('title', 'Admin Dashboard')
 
+@section('extra-css')
+<style>
+    /* Dark theme for select dropdowns */
+    select.form-select option {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+    
+    /* Dark table rows */
+    #gamesTableBody tr {
+        background-color: #1a1a1a !important;
+    }
+    
+    #gamesTableBody tr:hover {
+        background-color: #252525 !important;
+    }
+    
+    /* Pagination styling */
+    .pagination .page-link {
+        background-color: #1a1a1a !important;
+        border-color: rgba(0, 123, 255, 0.5) !important;
+        color: #ffffff !important;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: rgba(0, 123, 255, 0.2) !important;
+        border-color: rgba(0, 123, 255, 0.7) !important;
+        color: #ffffff !important;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+        color: #ffffff !important;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        background-color: #0d0d0d !important;
+        border-color: rgba(0, 123, 255, 0.2) !important;
+        color: #6c757d !important;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container mt-4 mb-5">
     <!-- Welcome Banner -->
@@ -132,27 +176,27 @@
                     <h6 class="mb-0 text-light">{{ __('messages.all_reviews') }}</h6>
                     <div class="d-flex align-items-center gap-2">
                         <label for="itemsPerPage" class="text-light mb-0">{{ __('messages.items_per_page') }}:</label>
-                        <select id="itemsPerPage" class="form-select form-select-sm" style="width: auto; background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" onchange="changeItemsPerPage()">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
+                        <select id="itemsPerPage" class="form-select form-select-sm" style="width: auto; background-color: #1a1a1a; border: 1px solid rgba(0, 123, 255, 0.5); color: #ffffff;" onchange="changeItemsPerPage()">
+                            <option value="5" style="background-color: #1a1a1a; color: #ffffff;">5</option>
+                            <option value="10" selected style="background-color: #1a1a1a; color: #ffffff;">10</option>
+                            <option value="20" style="background-color: #1a1a1a; color: #ffffff;">20</option>
+                            <option value="50" style="background-color: #1a1a1a; color: #ffffff;">50</option>
                         </select>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover text-light">
-                        <thead style="background-color: rgba(0, 123, 255, 0.15); border-color: rgba(0, 123, 255, 0.2);">
+                    <table class="table table-hover text-light" style="background-color: #1a1a1a;">
+                        <thead style="background-color: rgba(0, 123, 255, 0.3); border-color: rgba(0, 123, 255, 0.5);">
                             <tr>
-                                <th>{{ __('messages.game_id') }}</th>
-                                <th>{{ __('messages.game') }}</th>
-                                <th>{{ __('messages.rating') }}</th>
-                                <th>{{ __('messages.review') }}</th>
-                                <th>{{ __('messages.added') }}</th>
-                                <th>{{ __('messages.action') }}</th>
+                                <th style="color: #ffffff;">{{ __('messages.game_id') }}</th>
+                                <th style="color: #ffffff;">{{ __('messages.game') }}</th>
+                                <th style="color: #ffffff;">{{ __('messages.rating') }}</th>
+                                <th style="color: #ffffff;">{{ __('messages.review') }}</th>
+                                <th style="color: #ffffff;">{{ __('messages.added') }}</th>
+                                <th style="color: #ffffff;">{{ __('messages.action') }}</th>
                             </tr>
                         </thead>
-                        <tbody id="gamesTableBody">
+                        <tbody id="gamesTableBody" style="background-color: #1a1a1a;">
                             <tr>
                                 <td colspan="6" class="text-center text-muted">{{ __('messages.loading_reviews') }}</td>
                             </tr>
