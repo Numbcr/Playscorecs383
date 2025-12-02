@@ -37,7 +37,18 @@
         window.translations = {
             login: "{{ __('messages.login') }}",
             logout: "{{ __('messages.logout') }}",
-            admin_dashboard: "{{ __('messages.admin_dashboard') }}"
+            admin_dashboard: "{{ __('messages.admin_dashboard') }}",
+            release_date: "{{ __('messages.release_date') }}",
+            genres: "{{ __('messages.genres') }}",
+            platforms: "{{ __('messages.platforms') }}",
+            developers: "{{ __('messages.developers') }}",
+            review: "{{ __('messages.review') }}",
+            reviewed_at: "{{ __('messages.reviewed_at') }}",
+            reviewed_by: "{{ __('messages.reviewed_by') }}",
+            no_review_available: "{{ __('messages.no_review_available') }}",
+            error_loading_game: "{{ __('messages.error_loading_game') }}",
+            tba: "{{ __('messages.tba') }}",
+            na: "{{ __('messages.na') }}"
         };
         
         // Set CSRF token for AJAX requests

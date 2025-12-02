@@ -97,34 +97,34 @@ class GameDetailManager {
 
                     <div class="meta-info">
                         <div class="meta-item">
-                            <strong>Release Date</strong>
-                            <span>${game.released || 'TBA'}</span>
+                            <strong>${window.translations?.release_date || 'Release Date'}</strong>
+                            <span>${game.released || (window.translations?.tba || 'TBA')}</span>
                         </div>
                         <div class="meta-item">
-                            <strong>Genres</strong>
-                            <span>${game.genres?.map(g => g.name).join(', ') || 'N/A'}</span>
+                            <strong>${window.translations?.genres || 'Genres'}</strong>
+                            <span>${game.genres?.map(g => g.name).join(', ') || (window.translations?.na || 'N/A')}</span>
                         </div>
                         <div class="meta-item">
-                            <strong>Platforms</strong>
-                            <span>${game.platforms?.map(p => p.platform.name).join(', ') || 'N/A'}</span>
+                            <strong>${window.translations?.platforms || 'Platforms'}</strong>
+                            <span>${game.platforms?.map(p => p.platform.name).join(', ') || (window.translations?.na || 'N/A')}</span>
                         </div>
                         <div class="meta-item">
-                            <strong>Developers</strong>
-                            <span>${game.developers?.map(d => d.name).join(', ') || 'N/A'}</span>
+                            <strong>${window.translations?.developers || 'Developers'}</strong>
+                            <span>${game.developers?.map(d => d.name).join(', ') || (window.translations?.na || 'N/A')}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="review-section">
                     <div class="review-header">
-                        <h2>Review</h2>
-                        <span class="review-date">Reviewed at: ${new Date(game.review.published_at).toLocaleDateString()}</span>
+                        <h2>${window.translations?.review || 'Review'}</h2>
+                        <span class="review-date">${window.translations?.reviewed_at || 'Reviewed at'}: ${new Date(game.review.published_at).toLocaleDateString()}</span>
                     </div>
                     <div class="review-text">
-                        ${game.review.review_text || 'No review available'}
+                        ${game.review.review_text || (window.translations?.no_review_available || 'No review available')}
                     </div>
                     <div id="reviewerName">
-                        Reviewed by: ${game.review.username || 'Anonymous'}
+                        ${window.translations?.reviewed_by || 'Reviewed by'}: ${game.review.username || 'Anonymous'}
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@ class GameDetailManager {
         return 'score-low';
     }
 
-    renderError(message = 'Error loading game details. Please try again later.') {
+    renderError(message = window.translations?.error_loading_game || 'Error loading game details. Please try again later.') {
         this.container.innerHTML = `
             <div class="container mt-5">
                 <div class="alert alert-danger">
