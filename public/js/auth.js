@@ -14,10 +14,10 @@ function validateAndRegister(e) {
 
   fetch('/api/auth/register', {
     method: 'POST',
-    contentType: 'application/json',
     headers: {
       'X-CSRF-TOKEN': csrfToken,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     },
     body: JSON.stringify({
       name,
@@ -26,7 +26,12 @@ function validateAndRegister(e) {
       password_confirmation: confirm
     })
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     if (data.success) {
       alert("Registered!");
@@ -49,30 +54,33 @@ function login(e) {
 
   fetch('/api/auth/login', {
     method: 'POST',
-    contentType: 'application/json',
     headers: {
       'X-CSRF-TOKEN': csrfToken,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     },
     body: JSON.stringify({
       email: email,
       password: password
     })
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     if (data.success) {
       localStorage.setItem('user', JSON.stringify(data.user));
-      setTimeout(function() {
-        window.location.href = "/";
-      }, 100);
+      window.location.href = "/";
     } else {
-      alert(data.message || "Login successed .");
+      alert(data.message || "Login failed.");
     }
   })
   .catch(error => {
     console.error('Error:', error);
-    alert("Login failed");
+    alert("Login failed. Please try again.");
   });
 }
 
@@ -131,13 +139,18 @@ function logout() {
   
   fetch('/api/auth/logout', {
     method: 'POST',
-    contentType: 'application/json',
     headers: {
       'X-CSRF-TOKEN': csrfToken,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     }
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     localStorage.removeItem('user');
     window.location.href = '/login';

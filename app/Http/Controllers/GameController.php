@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class GameController extends Controller
 {
@@ -26,13 +27,18 @@ class GameController extends Controller
         $limit = $request->query('limit', 10);
         $offset = ($page - 1) * $limit;
 
-        // Get all games, sorted by rating
-        $games = Game::with('admin')
-            ->orderByDesc('rating')
-            ->skip($offset)
-            ->take($limit)
-            ->get()
-            ->map(fn($game) => $this->enrichGameData($game));
+        // Cache key based on page and limit
+        $cacheKey = "popular_games_p{$page}_l{$limit}";
+
+        // Cache for 5 minutes
+        $games = Cache::remember($cacheKey, 300, function () use ($offset, $limit) {
+            return Game::with('admin')
+                ->orderByDesc('rating')
+                ->skip($offset)
+                ->take($limit)
+                ->get()
+                ->map(fn($game) => $this->enrichGameData($game));
+        });
 
         return response()->json([
             'success' => true,
@@ -49,12 +55,18 @@ class GameController extends Controller
         $limit = $request->query('limit', 10);
         $offset = ($page - 1) * $limit;
 
-        $games = Game::with('admin')
-            ->orderByDesc('created_at')
-            ->skip($offset)
-            ->take($limit)
-            ->get()
-            ->map(fn($game) => $this->enrichGameData($game));
+        // Cache key based on page and limit
+        $cacheKey = "recent_games_p{$page}_l{$limit}";
+
+        // Cache for 5 minutes
+        $games = Cache::remember($cacheKey, 300, function () use ($offset, $limit) {
+            return Game::with('admin')
+                ->orderByDesc('created_at')
+                ->skip($offset)
+                ->take($limit)
+                ->get()
+                ->map(fn($game) => $this->enrichGameData($game));
+        });
 
         return response()->json([
             'success' => true,
@@ -146,6 +158,9 @@ class GameController extends Controller
                 'admin_id' => Auth::id(),
             ]);
 
+            // Clear cache when new game is added
+            Cache::flush();
+
             return response()->json([
                 'success' => true,
                 'insertId' => $game->game_id,
@@ -200,6 +215,9 @@ class GameController extends Controller
             'review_text' => $request->review_text,
         ]);
 
+        // Clear cache when game is updated
+        Cache::flush();
+
         return response()->json([
             'success' => true,
             'message' => 'Review updated successfully',
@@ -236,6 +254,9 @@ class GameController extends Controller
 
         $game->delete();
 
+        // Clear cache when game is deleted
+        Cache::flush();
+
         return response()->json([
             'success' => true,
             'message' => 'Review deleted successfully',
@@ -262,18 +283,27 @@ class GameController extends Controller
 
         // Only fetch RAWG data if rawg_id exists
         if ($game->rawg_id) {
-            try {
-                $rawgResponse = Http::timeout(5)->get("https://api.rawg.io/api/games/{$game->rawg_id}", [
-                    'key' => $this->rawgApiKey,
-                ]);
+            // Cache RAWG API response for 1 hour per game
+            $cacheKey = "rawg_game_{$game->rawg_id}";
+            
+            $rawgData = Cache::remember($cacheKey, 3600, function () use ($game) {
+                try {
+                    $rawgResponse = Http::timeout(5)->get("https://api.rawg.io/api/games/{$game->rawg_id}", [
+                        'key' => $this->rawgApiKey,
+                    ]);
 
-                if ($rawgResponse->successful()) {
-                    $rawgData = $rawgResponse->json();
-                    $game->game_image = $rawgData['background_image'] ?? '';
+                    if ($rawgResponse->successful()) {
+                        return $rawgResponse->json();
+                    }
+                } catch (\Exception $e) {
+                    \Log::warning('RAWG API error for game ' . $game->rawg_id . ': ' . $e->getMessage());
                 }
-            } catch (\Exception $e) {
-                // Log error if needed, but don't fail the request
-                \Log::warning('RAWG API error for game ' . $game->rawg_id . ': ' . $e->getMessage());
+                
+                return null;
+            });
+            
+            if ($rawgData) {
+                $game->game_image = $rawgData['background_image'] ?? '';
             }
         }
 

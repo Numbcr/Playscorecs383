@@ -77,7 +77,8 @@ function createGameCard(game) {
                 <div class="score-badge ${scoreClass}">${Number(game.rating)}</div>
                 <img src="${game.game_image}" 
                      alt="${game.game_title}" 
-                     class="card-img-top">
+                     class="card-img-top"
+                     loading="lazy">
                 <div class="card-body">
                     <h5 class="card-title">${game.game_title}</h5>
                     <p class="text-muted">${window.translations?.reviewed_by || 'Reviewed by'} ${game.admin_username}</p>

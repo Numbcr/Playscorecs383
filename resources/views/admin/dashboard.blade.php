@@ -8,20 +8,20 @@
     <div class="card bg-dark text-light border-info border-start border-5 mb-4" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: #007bff !important;">
         <div class="card-body">
             <h4 class="card-title text-info">{{ __('messages.admin_dashboard') }}</h4>
-            <p class="card-text text-secondary">Search for games on RAWG API, add reviews, and manage your game library</p>
+            <p class="card-text text-secondary">{{ __('messages.dashboard_description') }}</p>
         </div>
     </div>
 
     <!-- Add New Games Section -->
     <div class="card bg-dark text-light mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
         <div class="card-header bg-dark border-info" style="border-color: rgba(0, 123, 255, 0.2) !important;">
-            <h5 class="mb-0 text-info">Add New Game Review</h5>
+            <h5 class="mb-0 text-info">{{ __('messages.add_new_review') }}</h5>
         </div>
         <div class="card-body">
             <!-- RAWG ID Input for Preview -->
             <div class="input-group mb-3">
-                <input type="text" id="rawgSearchInput" class="form-control" placeholder="Enter RAWG Game ID..." style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
-                <button class="btn btn-outline-info" type="button" onclick="previewRawgGame()">Preview Game</button>
+                <input type="text" id="rawgSearchInput" class="form-control" placeholder="{{ __('messages.enter_rawg_id') }}" style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
+                <button class="btn btn-outline-info" type="button" onclick="previewRawgGame()">{{ __('messages.preview_game') }}</button>
             </div>
 
             <!-- Message Area -->
@@ -36,12 +36,12 @@
                         </div>
                         <div class="col-md-8">
                             <h5 id="gamePreviewTitle" class="mb-3 text-light"></h5>
-                            <p class="mb-2 text-light"><strong class="text-info">Released:</strong> <span id="gamePreviewReleased"></span></p>
-                            <p class="mb-2 text-light"><strong class="text-info">Genres:</strong> <span id="gamePreviewGenres"></span></p>
-                            <p class="mb-2 text-light"><strong class="text-info">Developers:</strong> <span id="gamePreviewDevelopers"></span></p>
-                            <p class="mb-2 text-light"><strong class="text-info">Publishers:</strong> <span id="gamePreviewPublishers"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">{{ __('messages.released') }}:</strong> <span id="gamePreviewReleased"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">{{ __('messages.genres') }}:</strong> <span id="gamePreviewGenres"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">{{ __('messages.developers') }}:</strong> <span id="gamePreviewDevelopers"></span></p>
+                            <p class="mb-2 text-light"><strong class="text-info">{{ __('messages.publishers') }}:</strong> <span id="gamePreviewPublishers"></span></p>
                             <div class="mt-3 mb-3 text-light" style="max-height: 200px; overflow-y: auto;" id="gamePreviewDescription"></div>
-                            <button type="button" onclick="addReviewFromPreview()" class="btn btn-info">Add Review for This Game</button>
+                            <button type="button" onclick="addReviewFromPreview()" class="btn btn-info">{{ __('messages.add_review_for_game') }}</button>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
     <!-- Review Form Section (Hidden) -->
     <div id="reviewFormContainer" class="card bg-dark text-light d-none mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
         <div class="card-header bg-dark border-info d-flex justify-content-between align-items-center" style="border-color: rgba(0, 123, 255, 0.2) !important;">
-            <h5 id="formTitle" class="mb-0 text-info">Add New Game Review</h5>
+            <h5 id="formTitle" class="mb-0 text-info">{{ __('messages.add_new_review') }}</h5>
             <button type="button" class="btn-close btn-close-white" onclick="closeReviewForm()"></button>
         </div>
         <div class="card-body">
@@ -63,20 +63,20 @@
                 <input type="hidden" id="gameId">
                 <input type="hidden" id="selectedRawgId">
                 <div class="mb-3">
-                    <label for="gameTitle" class="form-label">Game Title</label>
-                    <input type="text" id="gameTitle" name="game_title" class="form-control" placeholder="Game title..." readonly style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
+                    <label for="gameTitle" class="form-label">{{ __('messages.game_title') }}</label>
+                    <input type="text" id="gameTitle" name="game_title" class="form-control" placeholder="{{ __('messages.game_title') }}..." readonly style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
                 </div>
                 <div class="mb-3">
-                    <label for="rating" class="form-label">Your Rating (1-100)</label>
-                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="100" placeholder="Enter your rating..." required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
+                    <label for="rating" class="form-label">{{ __('messages.your_rating') }}</label>
+                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="100" placeholder="{{ __('messages.enter_rating') }}" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
                 </div>
                 <div class="mb-3">
-                    <label for="reviewText" class="form-label">Your Review</label>
-                    <textarea id="reviewText" name="review_text" class="form-control" rows="5" placeholder="Write your review here..." required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;"></textarea>
+                    <label for="reviewText" class="form-label">{{ __('messages.your_review') }}</label>
+                    <textarea id="reviewText" name="review_text" class="form-control" rows="5" placeholder="{{ __('messages.write_review') }}" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;"></textarea>
                 </div>
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-info flex-grow-1" id="submitBtnText">Add Review</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeReviewForm()">Cancel</button>
+                    <button type="submit" class="btn btn-info flex-grow-1" id="submitBtnText">{{ __('messages.add_review') }}</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeReviewForm()">{{ __('messages.cancel') }}</button>
                 </div>
             </form>
         </div>
@@ -85,12 +85,12 @@
     <!-- Manage Games Section (Search by Game ID) -->
     <div class="card bg-dark text-light mb-4 border-info" style="background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%); border-color: rgba(0, 123, 255, 0.2) !important;">
         <div class="card-header bg-dark border-info" style="border-color: rgba(0, 123, 255, 0.2) !important;">
-            <h5 class="mb-0 text-info">Manage Existing Reviews</h5>
+            <h5 class="mb-0 text-info">{{ __('messages.manage_reviews') }}</h5>
         </div>
         <div class="card-body">
             <div class="input-group mb-3">
-                <input type="text" id="searchGameId" class="form-control" placeholder="Enter Game ID to manage..." style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
-                <button class="btn btn-outline-info" type="button" onclick="searchReviewById()">Search</button>
+                <input type="text" id="searchGameId" class="form-control" placeholder="{{ __('messages.enter_game_id') }}" style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" />
+                <button class="btn btn-outline-info" type="button" onclick="searchReviewById()">{{ __('messages.search') }}</button>
             </div>
 
             <div id="reviewMessageArea" class="alert d-none"></div>
@@ -108,16 +108,16 @@
                                 <form id="editForm">
                                     <input type="hidden" id="managedGameId">
                                     <div class="mb-3">
-                                        <label for="managedRating" class="form-label">Rating (1-100)</label>
+                                        <label for="managedRating" class="form-label">{{ __('messages.rating') }} (1-100)</label>
                                         <input type="number" id="managedRating" class="form-control" min="1" max="100" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="managedReviewText" class="form-label">Review</label>
+                                        <label for="managedReviewText" class="form-label">{{ __('messages.review') }}</label>
                                         <textarea id="managedReviewText" class="form-control" rows="5" required style="background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;"></textarea>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-info flex-grow-1" onclick="updateManagedReview()">Update Review</button>
-                                        <button type="button" class="btn btn-outline-danger" onclick="deleteManagedReview()">Delete Review</button>
+                                        <button type="button" class="btn btn-info flex-grow-1" onclick="updateManagedReview()">{{ __('messages.update_review') }}</button>
+                                        <button type="button" class="btn btn-outline-danger" onclick="deleteManagedReview()">{{ __('messages.delete_review') }}</button>
                                     </div>
                                 </form>
                             </div>
@@ -128,25 +128,47 @@
 
             <!-- Your Reviews Table -->
             <div>
-                <h6 class="mb-3 text-light">All Your Reviews</h6>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0 text-light">{{ __('messages.all_reviews') }}</h6>
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="itemsPerPage" class="text-light mb-0">{{ __('messages.items_per_page') }}:</label>
+                        <select id="itemsPerPage" class="form-select form-select-sm" style="width: auto; background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 123, 255, 0.2); color: #ffffff;" onchange="changeItemsPerPage()">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover text-light">
                         <thead style="background-color: rgba(0, 123, 255, 0.15); border-color: rgba(0, 123, 255, 0.2);">
                             <tr>
-                                <th>Game ID</th>
-                                <th>Game</th>
-                                <th>Rating</th>
-                                <th>Review</th>
-                                <th>Added</th>
-                                <th>Action</th>
+                                <th>{{ __('messages.game_id') }}</th>
+                                <th>{{ __('messages.game') }}</th>
+                                <th>{{ __('messages.rating') }}</th>
+                                <th>{{ __('messages.review') }}</th>
+                                <th>{{ __('messages.added') }}</th>
+                                <th>{{ __('messages.action') }}</th>
                             </tr>
                         </thead>
                         <tbody id="gamesTableBody">
                             <tr>
-                                <td colspan="6" class="text-center text-muted">Loading reviews...</td>
+                                <td colspan="6" class="text-center text-muted">{{ __('messages.loading_reviews') }}</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                
+                <!-- Pagination Controls -->
+                <div id="paginationControls" class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-light">
+                        <span id="paginationInfo"></span>
+                    </div>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0" id="paginationButtons">
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -381,40 +403,151 @@ document.getElementById('reviewForm').addEventListener('submit', function(e) {
     });
 });
 
+// Pagination variables
+let currentPage = 1;
+let itemsPerPage = 10;
+let allReviews = [];
+
 function loadGames() {
     $.ajax({
         url: '/api/games/popular',
         method: 'GET',
         success: function(response) {
-            const tbody = document.getElementById('gamesTableBody');
-            tbody.innerHTML = '';
-
             if (response.data && response.data.length > 0) {
-                response.data.forEach(game => {
-                    const row = document.createElement('tr');
-                    const createdDate = new Date(game.created_at).toLocaleDateString();
-                    row.innerHTML = `
-                        <td>${game.game_id}</td>
-                        <td><strong>${game.game_title}</strong></td>
-                        <td><strong class="text-danger">${game.rating}/100</strong></td>
-                        <td>${game.review_text ? game.review_text.substring(0, 50) + '...' : 'No review'}</td>
-                        <td>${createdDate}</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary" onclick="loadReviewForEdit(${game.game_id})">Edit</button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteGame(${game.game_id})">Delete</button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
+                allReviews = response.data;
+                displayPaginatedReviews();
             } else {
+                const tbody = document.getElementById('gamesTableBody');
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No reviews yet. Add your first review!</td></tr>';
+                document.getElementById('paginationControls').classList.add('d-none');
             }
         },
         error: function() {
             document.getElementById('gamesTableBody').innerHTML = '<tr><td colspan="6" class="text-center text-muted">Error loading reviews</td></tr>';
+            document.getElementById('paginationControls').classList.add('d-none');
         }
     });
 }
+
+function displayPaginatedReviews() {
+    const tbody = document.getElementById('gamesTableBody');
+    tbody.innerHTML = '';
+    
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, allReviews.length);
+    const paginatedReviews = allReviews.slice(startIndex, endIndex);
+    
+    paginatedReviews.forEach(game => {
+        const row = document.createElement('tr');
+        const createdDate = new Date(game.created_at).toLocaleDateString();
+        row.innerHTML = `
+            <td>${game.game_id}</td>
+            <td><strong>${game.game_title}</strong></td>
+            <td><strong class="text-danger">${game.rating}/100</strong></td>
+            <td>${game.review_text ? game.review_text.substring(0, 50) + '...' : 'No review'}</td>
+            <td>${createdDate}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary" onclick="loadReviewForEdit(${game.game_id})">Edit</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteGame(${game.game_id})">Delete</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    updatePaginationControls();
+}
+
+function updatePaginationControls() {
+    const totalPages = Math.ceil(allReviews.length / itemsPerPage);
+    const paginationInfo = document.getElementById('paginationInfo');
+    const paginationButtons = document.getElementById('paginationButtons');
+    
+    // Show/hide pagination if needed
+    if (totalPages <= 1) {
+        document.getElementById('paginationControls').classList.add('d-none');
+        return;
+    } else {
+        document.getElementById('paginationControls').classList.remove('d-none');
+    }
+    
+    // Update info text
+    const startIndex = (currentPage - 1) * itemsPerPage + 1;
+    const endIndex = Math.min(currentPage * itemsPerPage, allReviews.length);
+    paginationInfo.textContent = `Showing ${startIndex}-${endIndex} of ${allReviews.length} reviews`;
+    
+    // Build pagination buttons
+    paginationButtons.innerHTML = '';
+    
+    // Previous button
+    const prevLi = document.createElement('li');
+    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">Previous</a>`;
+    paginationButtons.appendChild(prevLi);
+    
+    // Page numbers
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage < maxVisiblePages - 1) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    if (startPage > 1) {
+        const li = document.createElement('li');
+        li.className = 'page-item';
+        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(1); return false;">1</a>`;
+        paginationButtons.appendChild(li);
+        
+        if (startPage > 2) {
+            const dots = document.createElement('li');
+            dots.className = 'page-item disabled';
+            dots.innerHTML = `<span class="page-link">...</span>`;
+            paginationButtons.appendChild(dots);
+        }
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+        const li = document.createElement('li');
+        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>`;
+        paginationButtons.appendChild(li);
+    }
+    
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const dots = document.createElement('li');
+            dots.className = 'page-item disabled';
+            dots.innerHTML = `<span class="page-link">...</span>`;
+            paginationButtons.appendChild(dots);
+        }
+        
+        const li = document.createElement('li');
+        li.className = 'page-item';
+        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${totalPages}); return false;">${totalPages}</a>`;
+        paginationButtons.appendChild(li);
+    }
+    
+    // Next button
+    const nextLi = document.createElement('li');
+    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">Next</a>`;
+    paginationButtons.appendChild(nextLi);
+}
+
+function changePage(page) {
+    const totalPages = Math.ceil(allReviews.length / itemsPerPage);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    displayPaginatedReviews();
+}
+
+function changeItemsPerPage() {
+    itemsPerPage = parseInt(document.getElementById('itemsPerPage').value);
+    currentPage = 1;
+    displayPaginatedReviews();
+}
+
 
 function loadReviewForEdit(gameId) {
     $.ajax({

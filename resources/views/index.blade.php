@@ -17,8 +17,6 @@
 @section('extra-js')
 <script src="{{ asset('js/games.js') }}"></script>
 <script>
-    $(document).ready(function() {
-        updateNavigation();
-    });
+    document.addEventListener('DOMContentLoaded', updateNavigation);
 </script>
 @endsection
