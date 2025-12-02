@@ -48,7 +48,10 @@
             no_review_available: "{{ __('messages.no_review_available') }}",
             error_loading_game: "{{ __('messages.error_loading_game') }}",
             tba: "{{ __('messages.tba') }}",
-            na: "{{ __('messages.na') }}"
+            na: "{{ __('messages.na') }}",
+            read_review: "{{ __('messages.read_review') }}",
+            no_popular_games: "{{ __('messages.no_popular_games') }}",
+            no_recent_games: "{{ __('messages.no_recent_games') }}"
         };
         
         // Set CSRF token for AJAX requests

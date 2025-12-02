@@ -80,10 +80,10 @@ function createGameCard(game) {
                      class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">${game.game_title}</h5>
-                    <p class="text-muted">Reviewed by ${game.admin_username}</p>
+                    <p class="text-muted">${window.translations?.reviewed_by || 'Reviewed by'} ${game.admin_username}</p>
                     <p class="text-muted">${new Date(game.created_at).toLocaleDateString()}</p>
                     <a href="/games?gameId=${game.game_id}" class="btn btn-outline-light w-100">
-                        Read Review
+                        ${window.translations?.read_review || 'Read Review'}
                     </a>
                 </div>
             </div>
@@ -111,7 +111,7 @@ async function displayPopularGames() {
         // Preload next page in background
         setTimeout(preloadNextPages, 500);
     } else {
-        container.innerHTML = '<p class="text-center">No popular games found</p>';
+        container.innerHTML = `<p class="text-center">${window.translations?.no_popular_games || 'No popular games found'}</p>`;
     }
 }
 
@@ -135,7 +135,7 @@ async function displayRecentGames() {
         // Preload next page in background
         setTimeout(preloadNextPages, 500);
     } else {
-        container.innerHTML = '<p class="text-center">No recent games found</p>';
+        container.innerHTML = `<p class="text-center">${window.translations?.no_recent_games || 'No recent games found'}</p>`;
     }
 }
 

@@ -9,7 +9,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col">
-                    <h1 class="search-title mb-0">Search Results</h1>
+                    <h1 class="search-title mb-0">{{ __('messages.search_results') }}</h1>
                     <p class="search-subtitle mb-0 text-muted" id="searchQueryDisplay"></p>
                 </div>
             </div>
@@ -22,17 +22,17 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <select class="form-select" id="ratingFilter">
-                        <option value="">Rating: All</option>
-                        <option value="high">High Rated (80+)</option>
-                        <option value="mid">Mid Rated (60-79)</option>
-                        <option value="low">Low Rated (<60)</option>
+                        <option value="">{{ __('messages.rating_all') }}</option>
+                        <option value="high">{{ __('messages.high_rated') }}</option>
+                        <option value="mid">{{ __('messages.mid_rated') }}</option>
+                        <option value="low">{{ __('messages.low_rated') }}</option>
                     </select>
                 </div>
                 <div class="col-md-3">
                     <select class="form-select" id="sortFilter">
-                        <option value="relevance">Sort by: Relevance</option>
-                        <option value="rating">Highest Rated</option>
-                        <option value="date">Most Recent</option>
+                        <option value="relevance">{{ __('messages.sort_by') }}: {{ __('messages.relevance') }}</option>
+                        <option value="rating">{{ __('messages.highest_rated') }}</option>
+                        <option value="date">{{ __('messages.most_recent') }}</option>
                     </select>
                 </div>
             </div>
@@ -47,12 +47,12 @@
                     <div class="spinner-border spinner-border-sm me-2" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    Searching...
+                    {{ __('messages.searching') }}
                 </div>
             </div>
 
             <div id="noResults" class="alert alert-info" style="display: none;">
-                No results found.
+                {{ __('messages.no_results') }}
             </div>
 
             <div id="searchResultsContainer">
