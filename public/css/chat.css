@@ -30,9 +30,9 @@
     right: 0;
     width: 350px;
     height: 500px;
-    background: white;
+    background: #1a1a1a;
     border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -76,7 +76,7 @@
     flex: 1;
     padding: 15px;
     overflow-y: auto;
-    background: #f8f9fa;
+    background: #0d0d0d;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -87,7 +87,7 @@
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: #555;
     border-radius: 3px;
 }
 
@@ -107,10 +107,10 @@
 }
 
 .bot-message {
-    background: white;
-    color: #333;
+    background: #2d2d2d;
+    color: #e0e0e0;
     align-self: flex-start;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .typing-indicator .dots span {
@@ -142,17 +142,19 @@
 .chat-input-area {
     display: flex;
     padding: 15px;
-    background: white;
-    border-top: 1px solid #ddd;
+    background: #1a1a1a;
+    border-top: 1px solid #333;
 }
 
 .chat-input {
     flex: 1;
     padding: 10px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid #444;
     border-radius: 25px;
     outline: none;
     font-size: 14px;
+    background: #2d2d2d;
+    color: #e0e0e0;
 }
 
 .chat-input:focus {
