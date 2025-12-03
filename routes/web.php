@@ -38,6 +38,15 @@ Route::get('/search', function () {
     return view('search');
 })->name('search');
 
+// About and Contact pages
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 // Admin dashboard routes
 Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     Route::get('/admin/dashboard', function () {
