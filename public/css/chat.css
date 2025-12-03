@@ -10,7 +10,7 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #282a36;
     border: none;
     color: white;
     font-size: 24px;
@@ -39,7 +39,7 @@
 }
 
 .chat-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #282a36;
     color: white;
     padding: 15px;
     display: flex;
@@ -100,7 +100,7 @@
 }
 
 .user-message {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #282a36;
     color: white;
     align-self: flex-end;
     margin-left: auto;
@@ -166,7 +166,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #282a36;
     border: none;
     color: white;
     cursor: pointer;
