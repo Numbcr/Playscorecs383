@@ -69,6 +69,22 @@ function getScoreClass(rating) {
     return 'score-low';
 }
 
+function createSkeletonCard() {
+    return `
+        <div class="col-md-3 mb-4">
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-body">
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text-short"></div>
+                    <div class="skeleton skeleton-button"></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 function createGameCard(game) {
     const scoreClass = getScoreClass(game.rating);
     return `
@@ -96,6 +112,13 @@ async function displayPopularGames() {
     const container = document.getElementById('popularGamesContainer');
     if (!container) return;
     
+    // Show skeleton loading
+    container.innerHTML = `
+        <div class="row">
+            ${Array(4).fill('').map(() => createSkeletonCard()).join('')}
+        </div>
+    `;
+    
     const games = await fetchPopularGames(popularPage);
     if (games.length > 0) {
         container.innerHTML = `
@@ -119,6 +142,13 @@ async function displayPopularGames() {
 async function displayRecentGames() {
     const container = document.getElementById('recentGamesContainer');
     if (!container) return;
+    
+    // Show skeleton loading
+    container.innerHTML = `
+        <div class="row">
+            ${Array(4).fill('').map(() => createSkeletonCard()).join('')}
+        </div>
+    `;
     
     const games = await fetchRecentGames(recentPage);
     if (games.length > 0) {

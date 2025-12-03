@@ -9,9 +9,13 @@ class GameDetailManager {
     }
 
     async initialize() {
+        // Show skeleton loading immediately
+        this.showSkeletonLoading();
+        
         try {
             const gameDetails = await this.fetchGameDetails();
             this.renderGameDetails(gameDetails);
+            await this.loadComments();
         } catch (error) {
             console.error('Error initializing game details:', error);
             this.renderError(error.message);
@@ -127,6 +131,22 @@ class GameDetailManager {
                         ${window.translations?.reviewed_by || 'Reviewed by'}: ${game.review.username || 'Anonymous'}
                     </div>
                 </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h3>Comments</h3>
+                    <div id="commentForm" class="comment-form mb-4">
+                        <textarea id="commentInput" class="form-control mb-2" placeholder="Add a comment..." rows="3" maxlength="1000"></textarea>
+                        <button onclick="gameDetailManager.postComment()" class="btn btn-primary">Post Comment</button>
+                    </div>
+                    <div id="commentsContainer">
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -147,8 +167,153 @@ class GameDetailManager {
             </div>
         `;
     }
+
+    showSkeletonLoading() {
+        this.container.innerHTML = `
+            <div class="media-section" style="background-color: #2d2d2d;">
+                <div class="skeleton skeleton-detail-image"></div>
+            </div>
+
+            <div class="game-info">
+                <div class="game-header">
+                    <div class="skeleton skeleton-detail-header"></div>
+                </div>
+                <div class="skeleton-meta-grid">
+                    <div class="skeleton skeleton-meta-item"></div>
+                    <div class="skeleton skeleton-meta-item"></div>
+                    <div class="skeleton skeleton-meta-item"></div>
+                    <div class="skeleton skeleton-meta-item"></div>
+                </div>
+            </div>
+
+            <div class="review-section">
+                <div class="review-header">
+                    <div class="skeleton skeleton-title" style="width: 150px;"></div>
+                </div>
+                <div class="skeleton skeleton-review-text"></div>
+                <div class="skeleton skeleton-text" style="width: 200px;"></div>
+            </div>
+        `;
+    }
+
+    async loadComments() {
+        try {
+            const response = await fetch(`/api/games/${this.gameId}/comments`);
+            const data = await response.json();
+            
+            if (data.success) {
+                this.renderComments(data.comments);
+            }
+        } catch (error) {
+            console.error('Error loading comments:', error);
+            document.getElementById('commentsContainer').innerHTML = '<p class="text-danger">Failed to load comments.</p>';
+        }
+    }
+
+    renderComments(comments) {
+        const container = document.getElementById('commentsContainer');
+        
+        if (comments.length === 0) {
+            container.innerHTML = '<p class="text-muted">No comments yet. Be the first to comment!</p>';
+            return;
+        }
+
+        container.innerHTML = comments.map(comment => `
+            <div class="comment-item" data-comment-id="${comment.id}">
+                <div class="comment-header">
+                    <strong>${comment.username}</strong>
+                    <span class="text-muted ms-2">${comment.created_at}</span>
+                    ${this.canDeleteComment(comment) ? `
+                        <button onclick="gameDetailManager.deleteComment(${comment.id})" class="btn btn-sm btn-outline-danger ms-auto">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    ` : ''}
+                </div>
+                <div class="comment-text">${this.escapeHtml(comment.comment)}</div>
+            </div>
+        `).join('');
+    }
+
+    canDeleteComment(comment) {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        return user.id === comment.user_id || user.is_admin;
+    }
+
+    async postComment() {
+        const input = document.getElementById('commentInput');
+        const comment = input.value.trim();
+
+        if (!comment) {
+            alert('Please enter a comment.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/games/${this.gameId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ comment })
+            });
+
+            const data = await response.json();
+
+            if (response.status === 401) {
+                alert('Please login to post a comment.');
+                window.location.href = '/login';
+                return;
+            }
+
+            if (data.success) {
+                input.value = '';
+                await this.loadComments();
+            } else {
+                alert(data.message || 'Failed to post comment.');
+            }
+        } catch (error) {
+            console.error('Error posting comment:', error);
+            alert('Failed to post comment. Please try again.');
+        }
+    }
+
+    async deleteComment(commentId) {
+        if (!confirm('Are you sure you want to delete this comment?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/games/${this.gameId}/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                await this.loadComments();
+            } else {
+                alert(data.message || 'Failed to delete comment.');
+            }
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+            alert('Failed to delete comment. Please try again.');
+        }
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 }
 
+let gameDetailManager;
+
 document.addEventListener('DOMContentLoaded', () => {
-    new GameDetailManager().initialize();
+    gameDetailManager = new GameDetailManager();
+    gameDetailManager.initialize();
 });

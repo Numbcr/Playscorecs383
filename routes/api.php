@@ -24,6 +24,11 @@ Route::get('/games/rawg/key', [GameController::class, 'getRawgApiKey']);
 // Chat endpoint (requires authentication)
 Route::middleware('auth')->post('/chat', [\App\Http\Controllers\ChatController::class, 'send']);
 
+// Comment endpoints
+Route::get('/games/{gameId}/comments', [\App\Http\Controllers\CommentController::class, 'index']);
+Route::middleware('auth')->post('/games/{gameId}/comments', [\App\Http\Controllers\CommentController::class, 'store']);
+Route::middleware('auth')->delete('/games/{gameId}/comments/{commentId}', [\App\Http\Controllers\CommentController::class, 'destroy']);
+
 // Protected game endpoints (admin only)
 Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     Route::post('/games', [GameController::class, 'store']);

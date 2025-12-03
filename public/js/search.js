@@ -102,6 +102,15 @@ class SearchManager {
             this.elements.searchStatus.style.display = 'block';
         }
 
+        // Show skeleton loading
+        if (this.elements.resultsContainer) {
+            this.elements.resultsContainer.innerHTML = `
+                <div class="game-grid">
+                    ${Array(6).fill('').map(() => this.createSkeletonCard()).join('')}
+                </div>
+            `;
+        }
+
         try {
             const response = await fetch(`/api/games/search?q=${encodeURIComponent(query)}`);
             
@@ -188,6 +197,20 @@ class SearchManager {
                     <a href="/games?gameId=${game.game_id}" class="btn btn-outline-light w-100">
                         Read Review
                     </a>
+                </div>
+            </div>
+        `;
+    }
+
+    createSkeletonCard() {
+        return `
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-body">
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text-short"></div>
+                    <div class="skeleton skeleton-button"></div>
                 </div>
             </div>
         `;

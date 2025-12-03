@@ -44,4 +44,12 @@ class Game extends Model
     {
         return $this->belongsTo(User::class, 'admin_id', 'id');
     }
+
+    /**
+     * Get comments for this game.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'game_id', 'game_id');
+    }
 }
