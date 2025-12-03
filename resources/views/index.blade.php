@@ -20,3 +20,4 @@
     document.addEventListener('DOMContentLoaded', updateNavigation);
 </script>
 @endsection
+
