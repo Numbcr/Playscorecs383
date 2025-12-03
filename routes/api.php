@@ -21,8 +21,8 @@ Route::get('/games/search', [GameController::class, 'search']);
 Route::get('/games/{id}', [GameController::class, 'show']);
 Route::get('/games/rawg/key', [GameController::class, 'getRawgApiKey']);
 
-// Chat endpoint
-Route::post('/chat', [\App\Http\Controllers\ChatController::class, 'send']);
+// Chat endpoint (requires authentication)
+Route::middleware('auth')->post('/chat', [\App\Http\Controllers\ChatController::class, 'send']);
 
 // Protected game endpoints (admin only)
 Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {

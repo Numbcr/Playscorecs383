@@ -56,7 +56,7 @@ class ChatController extends Controller
             $contents[] = [
                 'role' => 'model',
                 'parts' => [
-                    ['text' => "Hi! I'm your gaming assistant. I have access to all the games reviewed on PlayScore. Ask me anything about games, recommendations, or reviews!"]
+                    ['text' => "Hi! I'm your gaming assistant. I have access to all the games reviewed on PlayScore. Ask me anything about games, recommendations, or reviews! dont exceed 30 words in your response."]
                 ]
             ];
 

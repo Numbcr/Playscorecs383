@@ -3,7 +3,21 @@ class ChatWidget {
     constructor() {
         this.isOpen = false;
         this.messages = [];
-        this.init();
+        this.isLoggedIn = false;
+        this.checkAuthAndInit();
+    }
+
+    async checkAuthAndInit() {
+        try {
+            const response = await fetch('/api/session-check');
+            const data = await response.json();
+            
+            this.isLoggedIn = data.loggedIn;
+            this.init();
+        } catch (error) {
+            console.error('Auth check failed:', error);
+            this.init(); // Still show widget, will handle login check on use
+        }
     }
 
     init() {
@@ -56,6 +70,24 @@ class ChatWidget {
     }
 
     toggleChat() {
+        // Check if user is logged in before opening chat
+        if (!this.isLoggedIn) {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.style.display = 'flex';
+            this.isOpen = true;
+            
+            // Show login required message
+            const messagesDiv = document.getElementById('chat-messages');
+            messagesDiv.innerHTML = `
+                <div class="bot-message">
+                    <strong>AI Assistant:</strong> Please login to use the AI assistant.
+                    <br><br>
+                    <a href="/login" class="btn btn-primary btn-sm">Login Now</a>
+                </div>
+            `;
+            return;
+        }
+        
         const chatBox = document.getElementById('chat-box');
         this.isOpen = !this.isOpen;
         chatBox.style.display = this.isOpen ? 'flex' : 'none';
@@ -96,6 +128,14 @@ class ChatWidget {
 
             const data = await response.json();
             this.removeTyping();
+
+            if (response.status === 401) {
+                this.addMessage('Please login to use the AI assistant.', 'bot');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+                return;
+            }
 
             if (data.success) {
                 this.addMessage(data.reply, 'bot');
