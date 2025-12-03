@@ -85,6 +85,10 @@ class GameDetailManager {
             return;
         }
 
+        // Check if user is logged in
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const isLoggedIn = user && user.id;
+
         this.container.innerHTML = `
             <div class="game-detail-container">
                 <div class="game-info">
@@ -136,8 +140,14 @@ class GameDetailManager {
                 <div class="comments-section">
                     <h3>Comments</h3>
                     <div id="commentForm" class="comment-form mb-4">
-                        <textarea id="commentInput" class="form-control mb-2" placeholder="Add a comment..." rows="3" maxlength="1000"></textarea>
-                        <button onclick="gameDetailManager.postComment()" class="btn btn-primary">Post Comment</button>
+                        ${isLoggedIn ? `
+                            <textarea id="commentInput" class="form-control mb-2" placeholder="Add a comment..." rows="3" maxlength="1000"></textarea>
+                            <button onclick="gameDetailManager.postComment()" class="btn btn-primary">Post Comment</button>
+                        ` : `
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Please <a href="/login" class="alert-link">login</a> to add a comment.
+                            </div>
+                        `}
                     </div>
                     <div id="commentsContainer">
                         <div class="text-center">
