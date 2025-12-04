@@ -255,6 +255,148 @@ Response (200):
 }
 ```
 
+## Comment Endpoints
+
+### Get Comments for a Game
+```
+GET /games/{gameId}/comments
+
+Response (200):
+{
+  "success": true,
+  "comments": [
+    {
+      "id": 1,
+      "comment": "Great game! Really enjoyed it.",
+      "username": "john_doe",
+      "user_id": 5,
+      "created_at": "2 hours ago"
+    },
+    {
+      "id": 2,
+      "comment": "One of the best games I've played.",
+      "username": "jane_smith",
+      "user_id": 8,
+      "created_at": "1 day ago"
+    }
+  ]
+}
+
+Response (404):
+{
+  "success": false,
+  "message": "Game not found"
+}
+```
+
+### Post a Comment (Requires Authentication)
+```
+POST /games/{gameId}/comments
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "comment": "This is my comment about the game."
+}
+
+Response (201):
+{
+  "success": true,
+  "comment": {
+    "id": 15,
+    "comment": "This is my comment about the game.",
+    "username": "john_doe",
+    "user_id": 5,
+    "created_at": "just now"
+  }
+}
+
+Response (401):
+{
+  "success": false,
+  "message": "You must be logged in to comment."
+}
+
+Response (422):
+{
+  "success": false,
+  "errors": {
+    "comment": ["The comment field is required."]
+  }
+}
+```
+
+### Delete a Comment (Requires Authentication)
+```
+DELETE /games/{gameId}/comments/{commentId}
+Authorization: Bearer {token}
+
+Response (200):
+{
+  "success": true,
+  "message": "Comment deleted successfully"
+}
+
+Response (401):
+{
+  "success": false,
+  "message": "You must be logged in to delete comments."
+}
+
+Response (403):
+{
+  "success": false,
+  "message": "You are not authorized to delete this comment."
+}
+
+Response (404):
+{
+  "success": false,
+  "message": "Comment not found"
+}
+```
+
+## AI Chat Endpoint (Requires Authentication)
+
+### Send Message to AI Chatbot
+```
+POST /chat
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "message": "Can you recommend some RPG games?",
+  "conversationHistory": [
+    {
+      "role": "user",
+      "parts": [{"text": "Hello"}]
+    },
+    {
+      "role": "model",
+      "parts": [{"text": "Hi! How can I help you?"}]
+    }
+  ]
+}
+
+Response (200):
+{
+  "success": true,
+  "response": "Based on our reviews, I'd recommend checking out..."
+}
+
+Response (401):
+{
+  "success": false,
+  "message": "Unauthorized. Please login to use the AI assistant."
+}
+
+Response (500):
+{
+  "success": false,
+  "error": "Failed to get response from AI"
+}
+```
+
 ## Error Responses
 
 ### Bad Request (400)
@@ -360,6 +502,45 @@ fetch('/api/games/search?q=minecraft')
   });
 ```
 
+### Post a Comment
+```javascript
+fetch(`/api/games/${gameId}/comments`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+  },
+  body: JSON.stringify({
+    comment: 'Great game!'
+  })
+})
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Comment posted:', data.comment);
+    }
+  });
+```
+
+### Chat with AI
+```javascript
+fetch('/api/chat', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+  },
+  body: JSON.stringify({
+    message: 'Recommend some action games',
+    conversationHistory: []
+  })
+})
+  .then(res => res.json())
+  .then(data => {
+    console.log('AI Response:', data.response);
+  });
+```
+
 ## Rate Limiting
 
 No rate limiting is currently implemented. Add using Laravel's `throttle` middleware if needed.
@@ -372,3 +553,47 @@ CORS is configured to allow same-origin requests. For cross-origin requests, upd
 
 Current version: v1 (implicit)
 Future versions should use routes like `/api/v2/...`
+
+## Notes
+
+### Comments System
+- Comments are tied to specific games via `game_id`
+- Only authenticated users can post comments
+- Users can delete their own comments
+- Admins can delete any comment
+- Comments are ordered by newest first (`created_at DESC`)
+- Maximum comment length: 1000 characters
+
+### AI Chatbot
+- Requires user authentication
+- Uses Google Gemini AI (gemini-2.0-flash model)
+- Maintains conversation history for context-aware responses
+- Conversation history should be sent with each request for continuity
+- Provides game recommendations based on the review database
+
+### Caching
+- Popular games list: cached for 5 minutes
+- Recent games list: cached for 5 minutes
+- RAWG API responses: cached for 1 hour
+- Cache automatically invalidated on create/update/delete operations
+
+### Authentication
+- Session-based authentication using Laravel's built-in auth system
+- CSRF token required for all POST/PUT/DELETE requests
+- Admin privileges required for game management (create/update/delete reviews)
+- User authentication required for comments and AI chat
+
+## Web Routes (Non-API)
+
+```
+GET  /                    → Homepage
+GET  /login              → Login page
+GET  /register           → Registration page
+GET  /games              → Game details page (requires ?gameId parameter)
+GET  /search             → Search results page (requires ?q parameter)
+GET  /about              → About Us page
+GET  /contact            → Contact Us page
+GET  /admin/dashboard    → Admin dashboard (requires admin privileges)
+POST /logout             → Logout (requires authentication)
+GET  /language/{locale}  → Switch language (en/ar)
+```
